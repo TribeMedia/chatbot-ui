@@ -9,6 +9,13 @@ const withPWA = require("next-pwa")({
 module.exports = withBundleAnalyzer(
   withPWA({
     reactStrictMode: true,
+      webpack: (config) => {
+          config.module.rules.push({
+              test: /\.node$/,
+              use: 'node-loader'
+          });
+          return config;
+      },
     images: {
       remotePatterns: [
         {
