@@ -183,7 +183,8 @@ export const handleLocalChat = async (
     newAbortController,
     setFirstTokenReceived,
     setChatMessages,
-    setToolInUse
+    setToolInUse,
+    "/api/sse"
   )
 }
 
@@ -245,7 +246,8 @@ export const handleHostedChat = async (
     newAbortController,
     setFirstTokenReceived,
     setChatMessages,
-    setToolInUse
+    setToolInUse,
+    process.env.NEXT_PUBLIC_BASE_URL! + "/api/sse"
   )
 }
 
@@ -288,7 +290,8 @@ export const processResponse = async (
   controller: AbortController,
   setFirstTokenReceived: React.Dispatch<React.SetStateAction<boolean>>,
   setChatMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>,
-  setToolInUse: React.Dispatch<React.SetStateAction<string>>
+  setToolInUse: React.Dispatch<React.SetStateAction<string>>,
+  apiEndpoint: string
 ) => {
   let fullText = ""
   let contentToAdd = ""
@@ -337,7 +340,8 @@ export const processResponse = async (
           })
         )
       },
-      controller.signal
+      controller.signal,
+      apiEndpoint
     )
 
     return fullText

@@ -269,7 +269,8 @@ export const useChatHandler = () => {
           newAbortController,
           setFirstTokenReceived,
           setChatMessages,
-          setToolInUse
+          setToolInUse,
+          "/api/sse"
         )
       } else {
         if (modelData!.provider === "ollama") {

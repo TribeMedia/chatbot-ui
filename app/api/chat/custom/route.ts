@@ -5,6 +5,7 @@ import { OpenAIStream, StreamingTextResponse } from "ai"
 import { ServerRuntime } from "next"
 import OpenAI from "openai"
 import { ChatCompletionCreateParamsBase } from "openai/resources/chat/completions.mjs"
+import { NextResponse } from "next/server"
 
 export const runtime: ServerRuntime = "edge"
 
@@ -46,7 +47,35 @@ export async function POST(request: Request) {
 
     const stream = OpenAIStream(response)
 
-    return new StreamingTextResponse(stream)
+    // Manually handle SSE formatting
+    const headers = new Headers({
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      Connection: "keep-alive"
+    })
+
+    const responseBody = new ReadableStream({
+      async start(controller) {
+        const reader = stream.getReader()
+        try {
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break // Stream is finished
+
+            // Format each chunk according to SSE specifications
+            const formattedData = `data: ${JSON.stringify(value)}\n\n`
+            controller.enqueue(new TextEncoder().encode(formattedData))
+          }
+        } catch (error) {
+          console.error("Stream reading error:", error)
+        } finally {
+          reader.releaseLock()
+          controller.close()
+        }
+      }
+    })
+
+    return new NextResponse(responseBody, { headers })
   } catch (error: any) {
     let errorMessage = error.message || "An unexpected error occurred"
     const errorCode = error.status || 500
