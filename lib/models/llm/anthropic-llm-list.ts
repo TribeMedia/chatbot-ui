@@ -15,6 +15,24 @@ const CLAUDE_2: LLM = {
   imageInput: false
 }
 
+const CLAUDE_3_OPUS: LLM = {
+  modelId: "claude-3-opus-20240229",
+  modelName: "Claude 3 Opus",
+  provider: "anthropic",
+  hostedId: "claude-3",
+  platformLink: ANTHROPIC_PLATORM_LINK,
+  imageInput: false
+}
+
+const CLAUDE_3_SONNET: LLM = {
+  modelId: "claude-3-sonnet-20240229",
+  modelName: "Claude 3 Sonnet",
+  provider: "anthropic",
+  hostedId: "claude-3",
+  platformLink: ANTHROPIC_PLATORM_LINK,
+  imageInput: false
+}
+
 // Claude Instant (UPDATED 12/21/23)
 const CLAUDE_INSTANT: LLM = {
   modelId: "claude-instant-1.2",
@@ -25,4 +43,9 @@ const CLAUDE_INSTANT: LLM = {
   imageInput: false
 }
 
-export const ANTHROPIC_LLM_LIST: LLM[] = [CLAUDE_2, CLAUDE_INSTANT]
+export const ANTHROPIC_LLM_LIST: LLM[] = [
+  CLAUDE_3_OPUS,
+  CLAUDE_3_SONNET,
+  CLAUDE_2,
+  CLAUDE_INSTANT
+]
